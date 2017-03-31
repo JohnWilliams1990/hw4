@@ -1,0 +1,300 @@
+{
+	"variables": [],
+	"info": {
+		"name": "hw4",
+		"_postman_id": "a4117e03-d680-2c25-c992-7c6c2d5b7903",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"request": {
+				"url": "http://johnwilliams-test.apigee.net/hw4/v2/movies",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody); // creates the json variable \r",
+							"//var id = jsonData.movies._id;// creates the id variable\r",
+							"\r",
+							"\r",
+							"console.log(jsonData[\"_id\"]);\r",
+							"postman.setEnvironmentVariable(\"_id\", jsonData[\"_id\"]);\r",
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://johnwilliams-test.apigee.net/hw4/v2/movies/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "title",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "year",
+						"value": "2000",
+						"description": ""
+					},
+					{
+						"key": "actor1",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "actor2",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "actor3",
+						"value": "something",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"request": {
+				"url": {
+					"raw": "http://johnwilliams-test.apigee.net/hw4/v2/movies/movie/:ID",
+					"protocol": "http",
+					"auth": {},
+					"host": [
+						"johnwilliams-test",
+						"apigee",
+						"net"
+					],
+					"path": [
+						"hw4",
+						"v2",
+						"movies",
+						"movie",
+						":ID"
+					],
+					"variable": [
+						{
+							"value": "{{_id}}",
+							"id": "ID"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"request": {
+				"url": {
+					"raw": "http://johnwilliams-test.apigee.net/hw4/v2/movies/movie/:ID",
+					"protocol": "http",
+					"auth": {},
+					"host": [
+						"johnwilliams-test",
+						"apigee",
+						"net"
+					],
+					"path": [
+						"hw4",
+						"v2",
+						"movies",
+						"movie",
+						":ID"
+					],
+					"variable": [
+						{
+							"value": "{{_id}}",
+							"id": "ID"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"request": {
+				"url": "http://johnwilliams-test.apigee.net/hw4/v2/movies/",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"request": {
+				"url": {
+					"raw": "http://johnwilliams-test.apigee.net/hw4/v2/movies/movie/:id",
+					"protocol": "http",
+					"auth": {},
+					"host": [
+						"johnwilliams-test",
+						"apigee",
+						"net"
+					],
+					"path": [
+						"hw4",
+						"v2",
+						"movies",
+						"movie",
+						":id"
+					],
+					"variable": [
+						{
+							"value": "{{_id}}",
+							"id": "id"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "title",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "year",
+						"value": "1010",
+						"description": ""
+					},
+					{
+						"key": "actor1",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "actor2",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "actor3",
+						"value": "somethingNEW",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"request": {
+				"url": "http://johnwilliams-test.apigee.net/hw4/v2/movies/",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "title",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "year",
+						"value": "1010",
+						"description": ""
+					},
+					{
+						"key": "actor1",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "actor2",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "actor3",
+						"value": "somethingNEW",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1337/movies/movie/john",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody); // creates the json variable \r",
+							"//var id = jsonData.movies._id;// creates the id variable\r",
+							"\r",
+							"\r",
+							"console.log(jsonData[\"_id\"]);\r",
+							"postman.setEnvironmentVariable(\"_id\", jsonData[\"_id\"]);\r",
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://johnwilliams-test.apigee.net/hw4/v2/movies/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "title",
+						"value": "something",
+						"description": ""
+					},
+					{
+						"key": "year",
+						"value": "2000",
+						"description": ""
+					},
+					{
+						"key": "actor1",
+						"value": "actor",
+						"description": ""
+					},
+					{
+						"key": "actor2",
+						"value": "something",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
