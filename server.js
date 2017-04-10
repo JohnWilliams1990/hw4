@@ -4,7 +4,7 @@ var mongoose = require('mongoose'); // for working w/ our database
 var vault = require("avault").createVault(__dirname);
 var config = require("./app/models/credentials");//__dirname+"\\app\\models\\credentials");//"credit"
 //var a = new config();// create an instance of the object so as to use it
-
+var http = require("http");
 
 
 //mongoose.Promise = global.Promise;
@@ -15,11 +15,22 @@ mongoose.connect(config.connectionString, function (err) {
 var movieSchema = mongoose.Schema({
     title: {type: String, required: true},
     release_year: {type: Number, required: true},
-    actor: [{type: String}]
+    actor: [{type: String}],
+
 });
 
 var Movie = mongoose.model('movie', movieSchema);
+////////////////////////////////////////////////////////////////////////////////////
+var reviewSchema = mongoose.Schema({
+    movie_id: {type: String,required: true},
+    reviewer:{type: String,required: true},
+    review: {type: String, required: true},
+    rating:{type: Number ,required: true, max:5, min:1},
+    movies: { type: mongoose.Schema.Types.ObjectId, ref:'Movie' }//,[]
+});
+////////////////////////////////////////////////////////////////////////////////////
 
+var Review = mongoose.model('review', reviewSchema);
 
 function funct(req){
     var method = req.method;
@@ -34,30 +45,117 @@ function funct(req){
     return response;
 };
 
+/*
+app.get('/movies', function(req, res,next) {
+
+  Review.find({}, function(err, reviews){
+        if (err) throw err;
+        console.log(reviews);
+        res.json(reviews);
+    },res);
+
+//var R = new Review;
+//R.movie_id = "58d43a1ead648c180c33c2ce";
+//R.reviewer = "Jake Jabbs";
+//R.review = "Oh, say, can you see, by the dawn's early light, What so proudly we hail'd at the twilight's last gleaming? Whose broad stripes and bright stars, thro' the perilous fight, O'er the ramparts we watch'd, were so gallantly streaming?";
+//R.rating = 1
+//R.save();
 
 
+        Movie.find({}, function(err, reviews){
+        if (err) throw err;
+        console.log(reviews);
+        res.json(reviews);
+    },res);
+
+none of this code should work at the same time---> this is an example built
+Review.findOneAndRemove({_id: "58e5df90bbdcba5480e9ab9e" }, function(err, reviews){
+        if (err) throw err;
+        console.log(reviews);
+        //res.json(reviews);
 
 
+         reviews.remove(function (err) {
+                //console.log(Object.keys(err));
+                reviews.save(function (err) {
+                });
+                if (err) {console.log(err);               // we are throwing an error here when we actually delete something
+                    throw err;
+                }
+
+                console.log("Movie successfully deleted");
+
+                var message = {Message:"This movie has been successfully deleted:"};
+                //message.movie = movies;
+                res.json(message);
+            });
+
+
+    },res);
+
+  
+//    next();
+
+
+});
+
+*/
 
 //get all movies
 app.get('/movies', function(req, res,next) {
 
+
+console.log(req.query.reviews);
+
+
+/*
     Movie.find({}, function(err, movies){
+
+
+        if (err) throw err;
+        console.log(movies);
+        res.json(movies);
+    },res);
+*/
+if (req.query.reviews == "true") 
+{
+Review.find({}, function(err, reviews){
+  
+	 Movie.find({}, function(err, movies){
+
+
+	        if (err) throw err;
+		var item = {};
+			item.movies = movies;
+			item.reviews = reviews;
+	        //console.log(item);
+
+
+	        res.json(item);
+	    },res, reviews);
+
+
+        if (err) throw err;
+        //console.log(reviews);
+        //res.json(reviews);
+    },res);
+}
+
+else 
+	   Movie.find({}, function(err, movies){
+
+
         if (err) throw err;
         console.log(movies);
         res.json(movies);
     },res);
 
-
-
-
-
-
-
-
 });
+
 //error ---> no bulk loading available
 app.put('/movies', function(req, res,next) {
+
+
     var method = req.method;
     console.log(method + " Failed with error 403. The server doesn't accept bulk updates.");
 
@@ -68,6 +166,7 @@ app.put('/movies', function(req, res,next) {
 
 
 });
+
 //create a movie
 app.post('/movies', function(req, res,next) {
 
@@ -109,7 +208,6 @@ app.post('/movies', function(req, res,next) {
         m.actor[0] = req.headers.actor1;
         m.actor[1] = req.headers.actor2;
         m.actor[2] = req.headers.actor3;
-
 
         if (req.headers.title == "")
         {
@@ -213,11 +311,57 @@ apiRouter.get('/movie/:id', function(req, res,next) {
 //res.send(req.url);
 //res.send(req.params.id)
 
+if (req.query.reviews == "true") 
+{
+Review.find({movie_id: req.headers.id}, function(err, reviews){
+  
+	 Movie.find({_id: req.headers.id}, function(err, movies){
+
+
+	        if (err) throw err;
+		var item = {};
+			item.movies = movies;
+			item.reviews = reviews;
+	        //console.log(item);
+
+	        console.log("Movie size: "+ movies.length + "   reviews size: "+ reviews.length );
+	   
+	        if (movies.length < 1)
+	        {
+	        	var erroring = {error : "The query returned No results. Please check the parameters of the request and try again."}
+	        	
+	        	res.send(erroring);
+	        }
+	        else 
+			{
+	        res.json(item);
+	        }
+	    },res, reviews);
+
+
+        if (err) throw err;
+        //console.log(reviews);
+        //res.json(reviews);
+    },res);
+}
+
+else 
+	   Movie.find({_id: req.headers.id}, function(err, movies){
+
+
+        if (err) throw err;
+        console.log(movies);
+        res.json(movies);
+    },res);
+
+
+
+/*
     Movie.find({_id: req.params.id }, function(err, movies) {
 
       //  if (err) {res.json(Object.keys(err)); next();//throw err;;
         //};
-        console.log("Fucking Shit:");
+     
 
        console.log(movies[0] === undefined);
 
@@ -245,6 +389,9 @@ apiRouter.get('/movie/:id', function(req, res,next) {
             }
 
     });
+*/
+
+
     /*
      Movie.find({_id: req.headers.id }, function(err, movies){
      if (err){ throw err;
